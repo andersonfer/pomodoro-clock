@@ -36,7 +36,7 @@ class App extends React.Component {
     return (
       <>
         <div id="header">
-          <h1 id="title">Pomodoro clock</h1>
+          <h1 id="title">Pomodoro Clock</h1>
           <div id="clock-setup">
             <SessionSetup
               sessionLength={this.state.sessionLength}
