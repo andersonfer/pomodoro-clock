@@ -24,14 +24,22 @@ describe('Tests for the SessionSetup component', () => {
     const decrementSessionLength =
       screen.getByRole('button',{name: "Decrement session length"});
 
-    // Clicks DEFAULT_SESSION_LENGTH + 1 times to check if it's going below 1
-    for(let i=0; i <= DEFAULT_SESSION_LENGTH; i++){
+    let sessionLength = screen.getByTitle('Session length in minutes').textContent;
+
+    // Decrement the session length until it equals 1
+    while(sessionLength !== '1'){
       await userEvent.click(decrementSessionLength);
+      sessionLength = screen.getByTitle('Session length in minutes').textContent;
     }
 
-    const sessionLength= screen.getByTitle('Session length in minutes').textContent;
+    expect(sessionLength).toBe('1');
 
-    expect(sessionLength).toBe(MIN_LENGTH_IN_MINUTES.toString());
+    // Try to click again
+    await userEvent.click(decrementSessionLength);
+
+    sessionLength = screen.getByTitle('Session length in minutes').textContent;
+
+    expect(sessionLength).toBe('1');
 
   });
 
@@ -55,12 +63,19 @@ describe('Tests for the SessionSetup component', () => {
     const incrementSessionLength =
       screen.getByRole('button',{name: "Increment session length"});
 
-    // Clicks MAX_LENGTH_IN_MINUTES + 1 times to check if it's going over 60
-    for(let i=0; i <= MAX_LENGTH_IN_MINUTES; i++){
+    let sessionLength= screen.getByTitle('Session length in minutes').textContent;
+
+    // Increment the session length until it equals 60
+    while(sessionLength !== '60'){
       await userEvent.click(incrementSessionLength);
+      sessionLength = screen.getByTitle('Session length in minutes').textContent;
     }
 
-    const sessionLength= screen.getByTitle('Session length in minutes').textContent;
+    expect(sessionLength).toBe('60');
+
+    // Try to click again
+    await userEvent.click(incrementSessionLength);
+    sessionLength = screen.getByTitle('Session length in minutes').textContent;
 
     expect(sessionLength).toBe(MAX_LENGTH_IN_MINUTES.toString());
 
