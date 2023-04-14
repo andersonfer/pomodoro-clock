@@ -125,6 +125,7 @@ class SessionSetup extends React.Component {
         <div>
           <span
             id="session-decrement"
+            title="Decrement session length"
             className="control"
             onClick={this.props.decrementFnc}
           >
@@ -133,6 +134,7 @@ class SessionSetup extends React.Component {
           <span id="session-length">{this.props.sessionLength}</span>
           <span
             id="session-increment"
+            title="Increment session length"
             className="control"
             onClick={this.props.incrementFnc}
           >
@@ -154,6 +156,7 @@ class BreakSetup extends React.Component {
         <div>
           <span
             id="break-decrement"
+            title="Decrement break length"
             className="control"
             onClick={this.props.decrementFnc}
           >
@@ -162,6 +165,7 @@ class BreakSetup extends React.Component {
           <span id="break-length">{this.props.breakLength}</span>
           <span
             id="break-increment"
+            title="Increment break length"
             className="control"
             onClick={this.props.incrementFnc}
           >

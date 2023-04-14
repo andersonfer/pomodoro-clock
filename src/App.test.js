@@ -8,6 +8,11 @@ it('should render properly', () => {
   screen.getByRole('heading',{level: 2, name: "Session"});
   screen.getByRole('heading',{level: 3, name: "Session Length"});
   screen.getByRole('heading',{level: 3, name: "Break Length"});
-  screen.getByRole('');
+
+  screen.getByTitle('Decrement session length');
+  screen.getByTitle('Increment session length');
+  screen.getByTitle('Decrement break length');
+  screen.getByTitle('Increment break length');
+  //screen.getByRole('');
 
 });
