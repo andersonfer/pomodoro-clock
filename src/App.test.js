@@ -8,5 +8,6 @@ it('should render properly', () => {
   screen.getByRole('heading',{level: 2, name: "Session"});
   screen.getByRole('heading',{level: 3, name: "Session Length"});
   screen.getByRole('heading',{level: 3, name: "Break Length"});
+  screen.getByRole('');
 
 });

@@ -115,35 +115,6 @@ class App extends React.Component {
   };
 }
 
-class BreakSetup extends React.Component {
-  render() {
-    return (
-      <div id="break-setup" className="flex-center">
-        <h3 id="break-label">
-          Break Length
-        </h3>
-        <div>
-          <span
-            id="break-decrement"
-            className="control"
-            onClick={this.props.decrementFnc}
-          >
-            <i className="fa-solid fa-arrow-down"></i>
-          </span>
-          <span id="break-length">{this.props.breakLength}</span>
-          <span
-            id="break-increment"
-            className="control"
-            onClick={this.props.incrementFnc}
-          >
-            <i className="fa-solid fa-arrow-up"></i>
-          </span>
-        </div>
-      </div>
-    );
-  }
-}
-
 class SessionSetup extends React.Component {
   render() {
     return (
@@ -162,6 +133,35 @@ class SessionSetup extends React.Component {
           <span id="session-length">{this.props.sessionLength}</span>
           <span
             id="session-increment"
+            className="control"
+            onClick={this.props.incrementFnc}
+          >
+            <i className="fa-solid fa-arrow-up"></i>
+          </span>
+        </div>
+      </div>
+    );
+  }
+}
+
+class BreakSetup extends React.Component {
+  render() {
+    return (
+      <div id="break-setup" className="flex-center">
+        <h3 id="break-label">
+          Break Length
+        </h3>
+        <div>
+          <span
+            id="break-decrement"
+            className="control"
+            onClick={this.props.decrementFnc}
+          >
+            <i className="fa-solid fa-arrow-down"></i>
+          </span>
+          <span id="break-length">{this.props.breakLength}</span>
+          <span
+            id="break-increment"
             className="control"
             onClick={this.props.incrementFnc}
           >
