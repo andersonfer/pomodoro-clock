@@ -16,5 +16,6 @@ it('should render properly', () => {
 
   screen.getByTestId('time-left');
 
-  //screen.getByRole('');
+  screen.getByRole('button',{name: "Start/stop clock"});
+  screen.getByRole('button',{name: "Reset clock"});
 });

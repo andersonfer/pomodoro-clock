@@ -365,14 +365,14 @@ class ClockDisplay extends React.Component {
 class PlayStopButton extends React.Component {
   render() {
     return (
-      <span
+      <button
         id="start_stop"
-        className="control"
+        title="Start/stop clock"
         onClick={this.props.resumeOrPauseClock}
       >
         <i className="fa-solid fa-play"></i>
         <i className="fa-solid fa-pause"></i>
-      </span>
+      </button>
     );
   }
 }
@@ -380,9 +380,9 @@ class PlayStopButton extends React.Component {
 class ResetButton extends React.Component {
   render() {
     return (
-      <span id="reset" className="control" onClick={this.props.resetClock}>
+      <button id="reset" title="Reset clock" onClick={this.props.resetClock}>
         <i className="fa-sharp fa-solid fa-repeat"></i>
-      </span>
+      </button>
     );
   }
 }
