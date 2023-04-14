@@ -26,18 +26,29 @@ div {
   color: var(--main-text-color);
 }
 
-#title {
+h1,h2,h3{
+  font-weight: normal;
+}
+
+h1 {
   font-size: 2em;
   margin: 0.3em 0;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-top: 0.1em;
+}
+
+h3 {
+  font-size: 1em;
+  margin: 0.5em 0;
 }
 
 #clock-setup {
   font-size: 1.25em;
 }
 
-.label {
-  margin: 0.5em 0;
-}
 
 .control {
   margin: 0 0.3em;
@@ -55,10 +66,6 @@ div {
   padding: 1em;
 }
 
-#timer-label {
-  font-size: 1.5em;
-  margin-top: 0.1em;
-}
 
 #time-left {
   font-size: 4em;

@@ -36,7 +36,7 @@ class App extends React.Component {
     return (
       <>
         <div id="header">
-          <div id="title">Pomodoro clock</div>
+          <h1 id="title">Pomodoro clock</h1>
           <div id="clock-setup">
             <SessionSetup
               sessionLength={this.state.sessionLength}
@@ -119,9 +119,9 @@ class BreakSetup extends React.Component {
   render() {
     return (
       <div id="break-setup" className="flex-center">
-        <div id="break-label" className="label">
+        <h3 id="break-label">
           Break Length
-        </div>
+        </h3>
         <div>
           <span
             id="break-decrement"
@@ -148,9 +148,9 @@ class SessionSetup extends React.Component {
   render() {
     return (
       <div id="session-setup" className="flex-center">
-        <div id="session-label" className="label">
+        <h3 id="session-label">
           Session Length
-        </div>
+        </h3>
         <div>
           <span
             id="session-decrement"
@@ -334,7 +334,7 @@ class ClockDisplay extends React.Component {
     return (
       <>
         <div id="clock-display" className="flex-center">
-          <div id="timer-label">{this.props.label}</div>
+          <h2 id="timer-label">{this.props.label}</h2>
           <div id="time-left">{this.getFormattedTimeLeft()}</div>
         </div>
         <div id="clock-controls">
