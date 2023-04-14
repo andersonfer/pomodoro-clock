@@ -62,16 +62,6 @@ button:hover {
   font-size: 1.25em;
 }
 
-
-.control {
-  margin: 0 0.3em;
-}
-
-.control:hover {
-  cursor: pointer;
-  color: gold;
-}
-
 #clock-display {
   border: 5px solid white;
   border-radius: 30px;

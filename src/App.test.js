@@ -9,10 +9,10 @@ it('should render properly', () => {
   screen.getByRole('heading',{level: 3, name: "Session Length"});
   screen.getByRole('heading',{level: 3, name: "Break Length"});
 
-  screen.getByTitle('Decrement session length');
-  screen.getByTitle('Increment session length');
-  screen.getByTitle('Decrement break length');
-  screen.getByTitle('Increment break length');
+  screen.getByRole('button',{name: "Decrement session length"});
+  screen.getByRole('button',{name: "Increment session length"});
+  screen.getByRole('button',{name: "Decrement break length"});
+  screen.getByRole('button',{name: "Increment break length"});
 
   screen.getByTestId('time-left');
 

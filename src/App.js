@@ -123,23 +123,21 @@ class SessionSetup extends React.Component {
           Session Length
         </h3>
         <div>
-          <span
+          <button
             id="session-decrement"
             title="Decrement session length"
-            className="control"
             onClick={this.props.decrementFnc}
           >
             <i className="fa-solid fa-arrow-down"></i>
-          </span>
+          </button>
           <span id="session-length">{this.props.sessionLength}</span>
-          <span
+          <button
             id="session-increment"
             title="Increment session length"
-            className="control"
             onClick={this.props.incrementFnc}
           >
             <i className="fa-solid fa-arrow-up"></i>
-          </span>
+          </button>
         </div>
       </div>
     );
@@ -154,23 +152,21 @@ class BreakSetup extends React.Component {
           Break Length
         </h3>
         <div>
-          <span
+          <button
             id="break-decrement"
             title="Decrement break length"
-            className="control"
             onClick={this.props.decrementFnc}
           >
             <i className="fa-solid fa-arrow-down"></i>
-          </span>
+          </button>
           <span id="break-length">{this.props.breakLength}</span>
-          <span
+          <button
             id="break-increment"
             title="Increment break length"
-            className="control"
             onClick={this.props.incrementFnc}
           >
             <i className="fa-solid fa-arrow-up"></i>
-          </span>
+          </button>
         </div>
       </div>
     );
