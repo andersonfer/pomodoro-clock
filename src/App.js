@@ -58,7 +58,7 @@ class App extends React.Component {
           />
         </div>
 
-        <div id="designed-by">Designed and coded by @andersonfer</div>
+        <footer>Designed and coded by @andersonfer</footer>
       </>
     );
   }
@@ -130,7 +130,7 @@ class SessionSetup extends React.Component {
           >
             <i className="fa-solid fa-arrow-down"></i>
           </button>
-          <span id="session-length">{this.props.sessionLength}</span>
+          <span id="session-length" title="Session length in minutes">{this.props.sessionLength}</span>
           <button
             id="session-increment"
             title="Increment session length"
@@ -159,7 +159,7 @@ class BreakSetup extends React.Component {
           >
             <i className="fa-solid fa-arrow-down"></i>
           </button>
-          <span id="break-length">{this.props.breakLength}</span>
+          <span id="break-length" title="Break length in minutes">{this.props.breakLength}</span>
           <button
             id="break-increment"
             title="Increment break length"
