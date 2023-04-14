@@ -25,14 +25,21 @@ describe('Tests for the BreakSetup component', () => {
     const decrementBreakLength =
       screen.getByRole('button',{name: "Decrement break length"});
 
-    // Clicks DEFAULT_BREAK_LENGTH + 1 times to check if it's going below 1
-    for(let i=0; i <= DEFAULT_BREAK_LENGTH; i++){
+    let breakLength = screen.getByTitle('Break length in minutes').textContent;
+
+    // Decrement the break length until it equals 1
+    while(breakLength !== '1'){
       await userEvent.click(decrementBreakLength);
+      breakLength = screen.getByTitle('Break length in minutes').textContent;
     }
 
-    const breakLength= screen.getByTitle('Break length in minutes').textContent;
+    expect(breakLength).toBe('1');
 
-    expect(breakLength).toBe(MIN_LENGTH_IN_MINUTES.toString());
+    // Try to decrement again
+    await userEvent.click(decrementBreakLength);
+    breakLength = screen.getByTitle('Break length in minutes').textContent;
+
+    expect(breakLength).toBe('1');
 
   });
 
@@ -56,14 +63,20 @@ describe('Tests for the BreakSetup component', () => {
     const incrementBreakLength =
       screen.getByRole('button',{name: "Increment break length"});
 
-    // Clicks MAX_LENGTH_IN_MINUTES + 1 times to check if it's going over 60
-    for(let i=0; i <= MAX_LENGTH_IN_MINUTES; i++){
+    let breakLength= screen.getByTitle('Break length in minutes').textContent;
+
+    while(breakLength !== '60'){
       await userEvent.click(incrementBreakLength);
+      breakLength= screen.getByTitle('Break length in minutes').textContent;
     }
 
-    const breakLength= screen.getByTitle('Break length in minutes').textContent;
+    expect(breakLength).toBe('60');
 
-    expect(breakLength).toBe(MAX_LENGTH_IN_MINUTES.toString());
+    // Try to click again
+    await userEvent.click(incrementBreakLength);
+    breakLength= screen.getByTitle('Break length in minutes').textContent;
+
+    expect(breakLength).toBe('60');
 
   });
 
