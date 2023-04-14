@@ -22,7 +22,7 @@ it('should render properly', () => {
   expect(breakLength).toHaveTextContent(/^5$/);
 
   const timeLeft = screen.getByTestId('time-left');
-  expect(timeLeft).toHaveTextContent('25:00');
+  expect(timeLeft).toHaveTextContent(/^25:00$/);
 
   screen.getByRole('button',{name: "Start/stop clock"});
   screen.getByRole('button',{name: "Reset clock"});
