@@ -38,15 +38,15 @@ class App extends React.Component {
         <div id="header">
           <div id="title">Pomodoro clock</div>
           <div id="clock-setup">
-            <BreakSetup
-              breakLength={this.state.breakLength}
-              incrementFnc={this.incrementBreakLength}
-              decrementFnc={this.decrementBreakLength}
-            />
             <SessionSetup
               sessionLength={this.state.sessionLength}
               incrementFnc={this.incrementSessionLength}
               decrementFnc={this.decrementSessionLength}
+            />
+            <BreakSetup
+              breakLength={this.state.breakLength}
+              incrementFnc={this.incrementBreakLength}
+              decrementFnc={this.decrementBreakLength}
             />
           </div>
         </div>
