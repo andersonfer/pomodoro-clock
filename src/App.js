@@ -2,12 +2,12 @@ import React from 'react';
 import './App.css';
 
 
-const MAX_LENGTH_IN_MINUTES = 60;
-const MIN_LENGTH_IN_MINUTES = 1;
+export const MAX_LENGTH_IN_MINUTES = 60;
+export const MIN_LENGTH_IN_MINUTES = 1;
 const FIFTY_NINE_SECONDS = 59;
 const ONE_SECOND_IN_MILISECONDS = 1000;
 const DEFAULT_BREAK_LENGTH = 5;
-const DEFAULT_SESSION_LENGTH = 25;
+export const DEFAULT_SESSION_LENGTH = 25;
 
 class App extends React.Component {
   constructor(props) {
