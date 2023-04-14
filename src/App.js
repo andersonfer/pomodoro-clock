@@ -339,7 +339,7 @@ class ClockDisplay extends React.Component {
       <>
         <div id="clock-display" className="flex-center">
           <h2 id="timer-label">{this.props.label}</h2>
-          <div id="time-left">{this.getFormattedTimeLeft()}</div>
+          <div id="time-left" data-testid="time-left">{this.getFormattedTimeLeft()}</div>
         </div>
         <div id="clock-controls">
           <PlayStopButton resumeOrPauseClock={this.props.startStopFnc} />

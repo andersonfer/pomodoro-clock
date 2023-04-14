@@ -13,6 +13,8 @@ it('should render properly', () => {
   screen.getByTitle('Increment session length');
   screen.getByTitle('Decrement break length');
   screen.getByTitle('Increment break length');
-  //screen.getByRole('');
 
+  screen.getByTestId('time-left');
+
+  //screen.getByRole('');
 });
