@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React from 'react';
 import './App.css';
 
@@ -117,30 +116,27 @@ class App extends React.Component {
 }
 
 class BreakSetup extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
-      <div id="break-setup" class="flex-center">
-        <div id="break-label" class="label">
+      <div id="break-setup" className="flex-center">
+        <div id="break-label" className="label">
           Break Length
         </div>
         <div>
           <span
             id="break-decrement"
-            class="control"
+            className="control"
             onClick={this.props.decrementFnc}
           >
-            <i class="fa-solid fa-arrow-down"></i>
+            <i className="fa-solid fa-arrow-down"></i>
           </span>
           <span id="break-length">{this.props.breakLength}</span>
           <span
             id="break-increment"
-            class="control"
+            className="control"
             onClick={this.props.incrementFnc}
           >
-            <i class="fa-solid fa-arrow-up"></i>
+            <i className="fa-solid fa-arrow-up"></i>
           </span>
         </div>
       </div>
@@ -149,30 +145,27 @@ class BreakSetup extends React.Component {
 }
 
 class SessionSetup extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
-      <div id="session-setup" class="flex-center">
-        <div id="session-label" class="label">
+      <div id="session-setup" className="flex-center">
+        <div id="session-label" className="label">
           Session Length
         </div>
         <div>
           <span
             id="session-decrement"
-            class="control"
+            className="control"
             onClick={this.props.decrementFnc}
           >
-            <i class="fa-solid fa-arrow-down"></i>
+            <i className="fa-solid fa-arrow-down"></i>
           </span>
           <span id="session-length">{this.props.sessionLength}</span>
           <span
             id="session-increment"
-            class="control"
+            className="control"
             onClick={this.props.incrementFnc}
           >
-            <i class="fa-solid fa-arrow-up"></i>
+            <i className="fa-solid fa-arrow-up"></i>
           </span>
         </div>
       </div>
@@ -340,7 +333,7 @@ class ClockDisplay extends React.Component {
   render() {
     return (
       <>
-        <div id="clock-display" class="flex-center">
+        <div id="clock-display" className="flex-center">
           <div id="timer-label">{this.props.label}</div>
           <div id="time-left">{this.getFormattedTimeLeft()}</div>
         </div>
@@ -366,31 +359,25 @@ class ClockDisplay extends React.Component {
 }
 
 class PlayStopButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <span
         id="start_stop"
-        class="control"
+        className="control"
         onClick={this.props.resumeOrPauseClock}
       >
-        <i class="fa-solid fa-play"></i>
-        <i class="fa-solid fa-pause"></i>
+        <i className="fa-solid fa-play"></i>
+        <i className="fa-solid fa-pause"></i>
       </span>
     );
   }
 }
 
 class ResetButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
-      <span id="reset" class="control" onClick={this.props.resetClock}>
-        <i class="fa-sharp fa-solid fa-repeat"></i>
+      <span id="reset" className="control" onClick={this.props.resetClock}>
+        <i className="fa-sharp fa-solid fa-repeat"></i>
       </span>
     );
   }
