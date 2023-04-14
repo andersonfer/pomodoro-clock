@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {DEFAULT_SESSION_LENGTH, MIN_LENGTH_IN_MINUTES, MAX_LENGTH_IN_MINUTES} from './App';
-import App from './App';
+import {DEFAULT_SESSION_LENGTH, MIN_LENGTH_IN_MINUTES, MAX_LENGTH_IN_MINUTES} from '../App';
+import App from '../App';
 
 describe('Tests for the SessionSetup component', () => {
   it('should decrement the session length when clicked', async () => {
