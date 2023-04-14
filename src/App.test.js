@@ -14,7 +14,8 @@ it('should render properly', () => {
   screen.getByRole('button',{name: "Decrement break length"});
   screen.getByRole('button',{name: "Increment break length"});
 
-  screen.getByTestId('time-left');
+  const timeLeft = screen.getByTestId('time-left');
+  expect(timeLeft).toHaveTextContent('25:00');
 
   screen.getByRole('button',{name: "Start/stop clock"});
   screen.getByRole('button',{name: "Reset clock"});
