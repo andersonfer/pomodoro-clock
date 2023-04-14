@@ -36,7 +36,7 @@ class App extends React.Component {
     return (
       <>
         <div id="header">
-          <div id="title">25 + 5 clock</div>
+          <div id="title">Pomodoro clock</div>
           <div id="clock-setup">
             <BreakSetup
               breakLength={this.state.breakLength}
