@@ -96,3 +96,35 @@ it( 'should play a beep and start a break when the session ends', async () => {
   //cleanup
   mockPlay.mockRestore();
 });
+
+it('should play a beep and start a session when the break ends', async () =>{
+  jest.useFakeTimers();
+
+  render(<App />);
+
+  const beepToBePlayed = screen.getByTestId('beep');
+  const mockPlay = jest.spyOn(beepToBePlayed, 'play').mockImplementation(() => {})
+
+  const startStopButton = screen.getByRole('button',{name: "Start/stop clock"});
+  await userEvent.click(startStopButton);
+
+  //Advance the timer by 25mins + 5mins (session + break)
+  act(() => { jest.advanceTimersByTime(1500000); } );
+  //TODO analyze why this have to be done in two times
+  act(() => { jest.advanceTimersByTime(300000); } );
+
+  expect(mockPlay).toHaveBeenCalledTimes(2);
+  expect(screen.getByRole('heading',{name: "Session"})).toBeInTheDocument();
+
+   const currentTimeLeft = screen.getByTestId('time-left').textContent;
+  // Get the minutes part of the display
+  // Cast to number to remove any 0 in the beginning
+  const minutesLeft = Number(currentTimeLeft.split(':')[0]);
+  const sessionLength = Number(screen.getByTitle('Session length in minutes').textContent);
+
+  expect(minutesLeft).toEqual(sessionLength);
+
+  //cleanup
+  mockPlay.mockRestore();
+
+});
