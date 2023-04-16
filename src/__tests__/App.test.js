@@ -81,12 +81,8 @@ it( 'should play a beep and start a break when the session ends', async () => {
 
   //Advance the timer by 25mins
   act(() => { jest.advanceTimersByTime(1500000); } );
-  expect(screen.getByRole('heading',{name: "Session"})).toBeInTheDocument();
+
   expect(mockPlay).toHaveBeenCalledTimes(1);
-
-  //Advance the timer by 1second
-  act(() => { jest.advanceTimersByTime(1000); } );
-
   expect(screen.getByRole('heading',{name: "Break"})).toBeInTheDocument();
 
   const currentTimeLeft = screen.getByTestId('time-left').textContent;

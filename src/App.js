@@ -209,8 +209,7 @@ class Clock extends React.Component {
     if (this.timerHasReachedZero()) {
       this.stopClock();
       this.playBeep();
-      //TODO this is a hack, must find another way of staying in zero
-      setTimeout(this.startSessionOrBreak,1000);
+      this.startSessionOrBreak();
     }
   }
 
