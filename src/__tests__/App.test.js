@@ -2,6 +2,9 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
+
+const TWENTY_FIVE_MINS_IN_MILISECONDS = 1500000;
+const FIVE_MINS_IN_MILISECONDS = 300000;
 let startStopButton;
 let beepToBePlayed;
 let mockPlay;
@@ -109,7 +112,7 @@ it( 'should play a beep and start a break when the session ends', async () => {
   await userEvent.click(startStopButton);
 
   //Advance the timer by 25mins
-  act(() => { jest.advanceTimersByTime(1500000); } );
+  act(() => { jest.advanceTimersByTime(TWENTY_FIVE_MINS_IN_MILISECONDS); } );
 
   expect(mockPlay).toHaveBeenCalledTimes(1);
   expect(screen.getByRole('heading',{name: "Break"})).toBeInTheDocument();
@@ -128,9 +131,9 @@ it('should play a beep and start a session when the break ends', async () =>{
   await userEvent.click(startStopButton);
 
   //Advance the timer by 25mins + 5mins (session + break)
-  act(() => { jest.advanceTimersByTime(1500000); } );
+  act(() => { jest.advanceTimersByTime(TWENTY_FIVE_MINS_IN_MILISECONDS); } );
   //TODO analyze why this have to be done in two times
-  act(() => { jest.advanceTimersByTime(300000); } );
+  act(() => { jest.advanceTimersByTime(FIVE_MINS_IN_MILISECONDS); } );
 
   //one beep for the end of the session and other for the end of the break
   expect(mockPlay).toHaveBeenCalledTimes(2);
@@ -200,8 +203,8 @@ it('should stop the session and reset the controls when clicking in reset',
   async () => {
     await userEvent.click(startStopButton);
 
-    //advance the timer in one minute
-    act(() => { jest.advanceTimersByTime(60000) });
+    //advance the timer
+    act(() => { jest.advanceTimersByTime(getRandomTime()) });
 
     const resetButton = screen.getByRole('button',{name: "Reset clock"});
 
@@ -217,10 +220,10 @@ it('should stop the break and reset the controls when clicking in reset',
     await userEvent.click(startStopButton);
 
     //advance the timer in 25 minutes to start a break
-    act(() => { jest.advanceTimersByTime(15000000) });
-    //advance the timer in 1:30 minute
+    act(() => { jest.advanceTimersByTime(TWENTY_FIVE_MINS_IN_MILISECONDS) });
+    //advance the timer
     //TODO analyze why this have to be done in two times
-    act(() => { jest.advanceTimersByTime(90000) });
+    act(() => { jest.advanceTimersByTime(getRandomTime()) });
 
     //assure that we are in a break
     const sessionLabel = screen.getByRole('heading',{level: 2, name: "Break"});
