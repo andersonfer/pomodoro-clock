@@ -108,6 +108,7 @@ it('should play a beep and start a session when the break ends', async () =>{
   //TODO analyze why this have to be done in two times
   act(() => { jest.advanceTimersByTime(300000); } );
 
+  //one beep for the end of the session and other for the end of the break
   expect(mockPlay).toHaveBeenCalledTimes(2);
   expect(screen.getByRole('heading',{name: "Session"})).toBeInTheDocument();
 
