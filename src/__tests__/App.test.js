@@ -2,9 +2,27 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
-it('should render properly', () => {
+let startStopButton;
+let beepToBePlayed;
+let mockPlay;
+
+beforeEach(() => {
+  jest.useFakeTimers();
+
   render(<App />);
 
+  startStopButton = screen.getByRole('button',{name: "Start/stop clock"});
+  beepToBePlayed = screen.getByTestId('beep');
+
+  mockPlay = jest.spyOn(beepToBePlayed, 'play').mockImplementation(() => {});
+
+});
+
+afterEach(() => {
+  mockPlay.mockRestore();
+})
+
+it('should render properly', () => {
   screen.getByRole('heading',{level: 1, name: "Pomodoro Clock"});
   screen.getByRole('heading',{level: 2, name: "Session"});
   screen.getByRole('heading',{level: 3, name: "Session Length"});
@@ -33,11 +51,6 @@ it('should render properly', () => {
 });
 
 it('should start, stop and resume the clock', async () => {
-  jest.useFakeTimers();
-
-  render(<App />);
-
-  const startStopButton = screen.getByRole('button',{name: "Start/stop clock"});
   const initialTimeLeft = screen.getByTestId('time-left').textContent;
 
   await userEvent.click(startStopButton);
@@ -69,14 +82,6 @@ it('should start, stop and resume the clock', async () => {
 });
 
 it( 'should play a beep and start a break when the session ends', async () => {
-  jest.useFakeTimers();
-
-  render(<App />);
-
-  const beepToBePlayed = screen.getByTestId('beep');
-  const mockPlay = jest.spyOn(beepToBePlayed, 'play').mockImplementation(() => {})
-
-  const startStopButton = screen.getByRole('button',{name: "Start/stop clock"});
   await userEvent.click(startStopButton);
 
   //Advance the timer by 25mins
@@ -93,19 +98,9 @@ it( 'should play a beep and start a break when the session ends', async () => {
 
   expect(minutesLeft).toEqual(breakLength);
 
-  //cleanup
-  mockPlay.mockRestore();
 });
 
 it('should play a beep and start a session when the break ends', async () =>{
-  jest.useFakeTimers();
-
-  render(<App />);
-
-  const beepToBePlayed = screen.getByTestId('beep');
-  const mockPlay = jest.spyOn(beepToBePlayed, 'play').mockImplementation(() => {})
-
-  const startStopButton = screen.getByRole('button',{name: "Start/stop clock"});
   await userEvent.click(startStopButton);
 
   //Advance the timer by 25mins + 5mins (session + break)
@@ -123,8 +118,5 @@ it('should play a beep and start a session when the break ends', async () =>{
   const sessionLength = Number(screen.getByTitle('Session length in minutes').textContent);
 
   expect(minutesLeft).toEqual(sessionLength);
-
-  //cleanup
-  mockPlay.mockRestore();
 
 });
