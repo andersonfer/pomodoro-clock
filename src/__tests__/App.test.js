@@ -144,7 +144,7 @@ it('should reset the controls when clicking in the reset button', async () => {
 
   await userEvent.click(resetButton);
 
-  checkIfControlsHaveReset();
+  checkClock();
 
   //increment session and break length by 1 to check if they're going to reset
   const incrementSessionLength =
@@ -159,11 +159,12 @@ it('should reset the controls when clicking in the reset button', async () => {
 
   await userEvent.click(resetButton);
 
-  checkIfControlsHaveReset();
+  checkClock();
 
 });
 
-checkIfControlsHaveReset = () => {
+//verifies if the clock is in its default state
+checkClock = () => {
   const sessionLength= screen.getByTitle('Session length in minutes');
   expect(sessionLength).toHaveTextContent(/^25$/);
 
@@ -188,7 +189,7 @@ it('should stop the session and reset the controls when clicking in reset',
 
     await userEvent.click(resetButton);
 
-    checkIfControlsHaveReset();
+    checkClock();
 
   });
 
@@ -211,6 +212,6 @@ it('should stop the break, stop the beep and reset the controls when clicking in
 
     await userEvent.click(resetButton);
 
-    checkIfControlsHaveReset();
+    checkClock();
 
   });
