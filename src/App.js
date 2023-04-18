@@ -339,7 +339,10 @@ class ClockDisplay extends React.Component {
           <div id="time-left" data-testid="time-left">{this.getFormattedTimeLeft()}</div>
         </div>
         <div id="clock-controls">
-          <PlayStopButton resumeOrPauseClock={this.props.startStopFnc} />
+          <button id="start_stop" title="Start/stop clock" onClick={this.props.startStopFnc}>
+            <i className="fa-solid fa-play"></i>
+            <i className="fa-solid fa-pause"></i>
+          </button>
           <button id="reset" title="Reset clock" onClick={this.props.resetFnc}>
             <i className="fa-sharp fa-solid fa-repeat"></i>
           </button>
@@ -360,21 +363,5 @@ class ClockDisplay extends React.Component {
     return formattedTimeLeft;
   };
 }
-
-class PlayStopButton extends React.Component {
-  render() {
-    return (
-      <button
-        id="start_stop"
-        title="Start/stop clock"
-        onClick={this.props.resumeOrPauseClock}
-      >
-        <i className="fa-solid fa-play"></i>
-        <i className="fa-solid fa-pause"></i>
-      </button>
-    );
-  }
-}
-
 
 export default App;
