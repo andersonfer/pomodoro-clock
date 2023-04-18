@@ -376,14 +376,5 @@ class PlayStopButton extends React.Component {
   }
 }
 
-class ResetButton extends React.Component {
-  render() {
-    return (
-      <button id="reset" title="Reset clock" onClick={this.props.resetClock}>
-        <i className="fa-sharp fa-solid fa-repeat"></i>
-      </button>
-    );
-  }
-}
 
 export default App;
