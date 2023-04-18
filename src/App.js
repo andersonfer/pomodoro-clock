@@ -340,7 +340,9 @@ class ClockDisplay extends React.Component {
         </div>
         <div id="clock-controls">
           <PlayStopButton resumeOrPauseClock={this.props.startStopFnc} />
-          <ResetButton resetClock={this.props.resetFnc} />
+          <button id="reset" title="Reset clock" onClick={this.props.resetFnc}>
+            <i className="fa-sharp fa-solid fa-repeat"></i>
+          </button>
           <audio id="beep" src="https://cdn.pixabay.com/download/audio/2023/01/06/audio_43c9ef7336.mp3?filename=achive-sound-132273.mp3" data-testid="beep"/>
         </div>
       </>
