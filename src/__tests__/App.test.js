@@ -57,35 +57,53 @@ it('should render properly', () => {
 });
 
 it('should start, stop and resume the clock', async () => {
-  const initialTimeLeft = screen.getByTestId('time-left').textContent;
+  let previousTimeLeft;
+  let currentTimeLeft;
+  //start the clock
+  //advance the timer
+  //check if the time-left has changed
+  previousTimeLeft = screen.getByTestId('time-left').textContent;
 
   await userEvent.click(startStopButton);
 
-  // Advance the timer by 1000ms
-  act(() => { jest.advanceTimersByTime(1000); } );
+  act(() => { jest.advanceTimersByTime(getRandomTime()) });
 
-  const timeLeftAfterOneSecond = screen.getByTestId('time-left').textContent;
+  currentTimeLeft = screen.getByTestId('time-left').textContent;
 
-  expect(timeLeftAfterOneSecond).not.toEqual(initialTimeLeft);
+  expect(currentTimeLeft).not.toEqual(previousTimeLeft);
 
-  await userEvent.click(startStopButton);
-
-  act(() => { jest.advanceTimersByTime(1000); } );
-
-  const timeLeftAfterClockStopped = screen.getByTestId('time-left').textContent;
-
-  expect(timeLeftAfterClockStopped).toEqual(timeLeftAfterOneSecond);
+  //stop clock
+  //advance the timer
+  //check if the time-left has not changed
+  previousTimeLeft = screen.getByTestId('time-left').textContent;
 
   await userEvent.click(startStopButton);
 
-  act(() => { jest.advanceTimersByTime(1000); } );
+  act(() => { jest.advanceTimersByTime(getRandomTime()) });
 
-  const currentTimeLeft = screen.getByTestId('time-left').textContent;
+  currentTimeLeft = screen.getByTestId('time-left').textContent;
 
-  expect(currentTimeLeft).not.toEqual(timeLeftAfterClockStopped);
+  expect(currentTimeLeft).toEqual(previousTimeLeft);
 
+  //resume clock
+  //advance the timer
+  //check if the time-left has changed
+  previousTimeLeft = screen.getByTestId('time-left').textContent;
+
+  await userEvent.click(startStopButton);
+
+  act(() => { jest.advanceTimersByTime(getRandomTime()) });
+
+  currentTimeLeft = screen.getByTestId('time-left').textContent;
+
+  expect(currentTimeLeft).not.toEqual(previousTimeLeft);
 
 });
+
+//return a random time between 1s and 59s in miliseconds
+getRandomTime = () => {
+  return Math.floor((Math.random() * 59000) + 1000);
+}
 
 it( 'should play a beep and start a break when the session ends', async () => {
   await userEvent.click(startStopButton);
