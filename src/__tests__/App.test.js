@@ -191,10 +191,10 @@ it('should stop the session and reset the controls when clicking in reset',
 
     checkClock();
 
-  });
+});
 
 
-it('should stop the break, stop the beep and reset the controls when clicking in reset',
+it('should stop the break and reset the controls when clicking in reset',
   async () => {
     await userEvent.click(startStopButton);
 
@@ -214,4 +214,4 @@ it('should stop the break, stop the beep and reset the controls when clicking in
 
     checkClock();
 
-  });
+});
