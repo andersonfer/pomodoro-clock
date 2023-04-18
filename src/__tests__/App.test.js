@@ -19,7 +19,11 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  //cleanup functions
   mockPlay.mockRestore();
+
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
 })
 
 it('should render properly', () => {
