@@ -5,6 +5,7 @@ import App from '../App';
 let startStopButton;
 let beepToBePlayed;
 let mockPlay;
+let mockPause;
 
 beforeEach(() => {
   jest.useFakeTimers();
@@ -15,6 +16,7 @@ beforeEach(() => {
   beepToBePlayed = screen.getByTestId('beep');
 
   mockPlay = jest.spyOn(beepToBePlayed, 'play').mockImplementation(() => {});
+  mockPause = jest.spyOn(beepToBePlayed, 'pause').mockImplementation(() => {});
 
 });
 
@@ -125,3 +127,82 @@ it('should play a beep and start a session when the break ends', async () =>{
   expect(minutesLeft).toEqual(sessionLength);
 
 });
+
+it('should stop the session, stop the beep and reset the controls when clicking in reset',
+  async () => {
+    //decrement session and break length to check if they're going to reset
+    decrementSessionAndBreakLength();
+
+    await userEvent.click(startStopButton);
+
+    //advance the timer in one minute
+    act(() => { jest.advanceTimersByTime(60000) });
+
+    const resetButton = screen.getByRole('button',{name: "Reset clock"});
+
+    await userEvent.click(resetButton);
+
+    checkIfControlsHaveReset();
+
+  });
+
+decrementSessionAndBreakLength = async () => {
+  const decrementSessionLength =
+      screen.getByRole('button',{name: "Decrement session length"});
+    await userEvent.click(decrementSessionLength);
+
+    const decrementBreakLength =
+      screen.getByRole('button',{name: "Decrement break length"});
+    await userEvent.click(decrementBreakLength);
+}
+
+checkIfControlsHaveReset = () => {
+  expect(mockPause).toHaveBeenCalledTimes(1);
+
+  const sessionLength= screen.getByTitle('Session length in minutes');
+  expect(sessionLength).toHaveTextContent(/^25$/);
+
+  const breakLength= screen.getByTitle('Break length in minutes');
+  expect(breakLength).toHaveTextContent(/^5$/);
+
+  const sessionLabel = screen.getByRole('heading',{level: 2, name: "Session"});
+  expect(sessionLabel).toBeInTheDocument();
+
+  const timeLeft = screen.getByTestId('time-left');
+  expect(timeLeft).toHaveTextContent(/^25:00$/);
+}
+
+it('should stop the break, stop the beep and reset the controls when clicking in reset',
+  async () => {
+    //increment session and break length by 1 to check if they're going to reset
+    incrementSessionAndBreakLength();
+
+    await userEvent.click(startStopButton);
+
+    //advance the timer in 26 minutes to start a break
+    act(() => { jest.advanceTimersByTime(15600000) });
+    //advance the timer in 1 minute
+    //TODO analyze why this have to be done in two times
+    act(() => { jest.advanceTimersByTime(60000) });
+
+    //assure that we are in a break
+    const sessionLabel = screen.getByRole('heading',{level: 2, name: "Break"});
+    expect(sessionLabel).toBeInTheDocument();
+
+    const resetButton = screen.getByRole('button',{name: "Reset clock"});
+
+    await userEvent.click(resetButton);
+
+    checkIfControlsHaveReset();
+
+  });
+
+incrementSessionAndBreakLength = async () => {
+  const incrementSessionLength =
+      screen.getByRole('button',{name: "Increment session length"});
+    await userEvent.click(incrementSessionLength);
+
+    const incrementBreakLength =
+      screen.getByRole('button',{name: "Increment break length"});
+    await userEvent.click(incrementBreakLength);
+}
