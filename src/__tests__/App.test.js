@@ -181,9 +181,9 @@ it('should stop the break, stop the beep and reset the controls when clicking in
 
     //advance the timer in 26 minutes to start a break
     act(() => { jest.advanceTimersByTime(15600000) });
-    //advance the timer in 1 minute
+    //advance the timer in 1:30 minute
     //TODO analyze why this have to be done in two times
-    act(() => { jest.advanceTimersByTime(60000) });
+    act(() => { jest.advanceTimersByTime(90000) });
 
     //assure that we are in a break
     const sessionLabel = screen.getByRole('heading',{level: 2, name: "Break"});

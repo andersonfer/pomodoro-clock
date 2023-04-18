@@ -303,7 +303,8 @@ class Clock extends React.Component {
   resetClock = () => {
     this.setState({
       hasBreakStarted: false,
-      minutes:DEFAULT_SESSION_LENGTH
+      minutes:DEFAULT_SESSION_LENGTH,
+      seconds:0
     });
     this.stopClock();
     this.resetBeep();
