@@ -38,16 +38,50 @@ class App extends React.Component {
         <div id="header">
           <h1 id="title">Pomodoro Clock</h1>
           <div id="clock-setup">
-            <SessionSetup
-              sessionLength={this.state.sessionLength}
-              incrementFnc={this.incrementSessionLength}
-              decrementFnc={this.decrementSessionLength}
-            />
-            <BreakSetup
-              breakLength={this.state.breakLength}
-              incrementFnc={this.incrementBreakLength}
-              decrementFnc={this.decrementBreakLength}
-            />
+            <div id="session-setup" className="flex-center">
+              <h3 id="session-label">
+                Session Length
+              </h3>
+              <div>
+                <button
+                  id="session-decrement"
+                  title="Decrement session length"
+                  onClick={this.decrementSessionLength}
+                >
+                  <i className="fa-solid fa-arrow-down"></i>
+                </button>
+                <span id="session-length" title="Session length in minutes">{this.state.sessionLength}</span>
+                <button
+                  id="session-increment"
+                  title="Increment session length"
+                  onClick={this.incrementSessionLength}
+                >
+                  <i className="fa-solid fa-arrow-up"></i>
+                </button>
+              </div>
+            </div>
+            <div id="break-setup" className="flex-center">
+              <h3 id="break-label">
+                Break Length
+              </h3>
+              <div>
+                <button
+                  id="break-decrement"
+                  title="Decrement break length"
+                  onClick={this.decrementBreakLength}
+                >
+                  <i className="fa-solid fa-arrow-down"></i>
+                </button>
+                <span id="break-length" title="Break length in minutes">{this.state.breakLength}</span>
+                <button
+                  id="break-increment"
+                  title="Increment break length"
+                  onClick={this.incrementBreakLength}
+                >
+                  <i className="fa-solid fa-arrow-up"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -113,64 +147,6 @@ class App extends React.Component {
     });
     document.dispatchEvent(sessionUpdatedEvent);
   };
-}
-
-class SessionSetup extends React.Component {
-  render() {
-    return (
-      <div id="session-setup" className="flex-center">
-        <h3 id="session-label">
-          Session Length
-        </h3>
-        <div>
-          <button
-            id="session-decrement"
-            title="Decrement session length"
-            onClick={this.props.decrementFnc}
-          >
-            <i className="fa-solid fa-arrow-down"></i>
-          </button>
-          <span id="session-length" title="Session length in minutes">{this.props.sessionLength}</span>
-          <button
-            id="session-increment"
-            title="Increment session length"
-            onClick={this.props.incrementFnc}
-          >
-            <i className="fa-solid fa-arrow-up"></i>
-          </button>
-        </div>
-      </div>
-    );
-  }
-}
-
-class BreakSetup extends React.Component {
-  render() {
-    return (
-      <div id="break-setup" className="flex-center">
-        <h3 id="break-label">
-          Break Length
-        </h3>
-        <div>
-          <button
-            id="break-decrement"
-            title="Decrement break length"
-            onClick={this.props.decrementFnc}
-          >
-            <i className="fa-solid fa-arrow-down"></i>
-          </button>
-          <span id="break-length" title="Break length in minutes">{this.props.breakLength}</span>
-          <button
-            id="break-increment"
-            title="Increment break length"
-            onClick={this.props.incrementFnc}
-          >
-            <i className="fa-solid fa-arrow-up"></i>
-          </button>
-        </div>
-      </div>
-    );
-  }
 }
 
 class Clock extends React.Component {
@@ -254,17 +230,34 @@ class Clock extends React.Component {
   render() {
     return (
       <>
-        <ClockDisplay
-          label={this.state.hasBreakStarted ? "Break" : "Session"}
-          minutes={this.state.minutes}
-          sessionLength={this.props.sessionLength}
-          seconds={this.state.seconds}
-          startStopFnc={this.startStopClock}
-          resetFnc={this.resetClock}
-        />
+        <div id="clock-display" className="flex-center">
+          <h2 id="timer-label">{this.state.hasBreakStarted ? "Break" : "Session"}</h2>
+          <div id="time-left" data-testid="time-left">{this.getFormattedTimeLeft()}</div>
+        </div>
+        <div id="clock-controls">
+          <button id="start_stop" title="Start/stop clock" onClick={this.startStopClock}>
+            <i className="fa-solid fa-play"></i>
+            <i className="fa-solid fa-pause"></i>
+          </button>
+          <button id="reset" title="Reset clock" onClick={this.resetClock}>
+            <i className="fa-sharp fa-solid fa-repeat"></i>
+          </button>
+          <audio id="beep" src="https://cdn.pixabay.com/download/audio/2023/01/06/audio_43c9ef7336.mp3?filename=achive-sound-132273.mp3" data-testid="beep"/>
+        </div>
       </>
     );
   }
+
+  getFormattedTimeLeft = () => {
+    const formattedMinutesLeft = this.state.minutes.toLocaleString(undefined, {
+      minimumIntegerDigits: 2
+    });
+    const formattedSecondsLeft = this.state.seconds.toLocaleString(undefined, {
+      minimumIntegerDigits: 2
+    });
+    const formattedTimeLeft = formattedMinutesLeft + ":" + formattedSecondsLeft;
+    return formattedTimeLeft;
+  };
 
   startStopClock = () => {
     if (this.state.isClockPaused) {
@@ -322,46 +315,5 @@ class Clock extends React.Component {
   };
 }
 
-class ClockDisplay extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      minutes: 0,
-      seconds: 0
-    };
-  }
-
-  render() {
-    return (
-      <>
-        <div id="clock-display" className="flex-center">
-          <h2 id="timer-label">{this.props.label}</h2>
-          <div id="time-left" data-testid="time-left">{this.getFormattedTimeLeft()}</div>
-        </div>
-        <div id="clock-controls">
-          <button id="start_stop" title="Start/stop clock" onClick={this.props.startStopFnc}>
-            <i className="fa-solid fa-play"></i>
-            <i className="fa-solid fa-pause"></i>
-          </button>
-          <button id="reset" title="Reset clock" onClick={this.props.resetFnc}>
-            <i className="fa-sharp fa-solid fa-repeat"></i>
-          </button>
-          <audio id="beep" src="https://cdn.pixabay.com/download/audio/2023/01/06/audio_43c9ef7336.mp3?filename=achive-sound-132273.mp3" data-testid="beep"/>
-        </div>
-      </>
-    );
-  }
-
-  getFormattedTimeLeft = () => {
-    const formattedMinutesLeft = this.props.minutes.toLocaleString(undefined, {
-      minimumIntegerDigits: 2
-    });
-    const formattedSecondsLeft = this.props.seconds.toLocaleString(undefined, {
-      minimumIntegerDigits: 2
-    });
-    const formattedTimeLeft = formattedMinutesLeft + ":" + formattedSecondsLeft;
-    return formattedTimeLeft;
-  };
-}
 
 export default App;
