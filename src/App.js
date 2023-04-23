@@ -13,7 +13,7 @@ const ONE_SECOND_IN_MILISECONDS = 1000;
 export default function App(){
   const [breakLength, setBreakLength] = useState(DEFAULT_BREAK_LENGTH);
   const [sessionLength, setSessionLength] = useState(DEFAULT_SESSION_LENGTH);
-  const [isSessionRunning, setIsSessionRunning] = useState(true);
+  const [isSessionActive, setIsSessionActive] = useState(true);
   const [isClockPaused, setIsClockPaused] = useState(true);
   const [timeLeftInSeconds, setTimeLeftInSeconds] = useState(DEFAULT_SESSION_LENGTH * 60);
 
@@ -23,14 +23,14 @@ export default function App(){
   //when the clock reaches 00:00
   //either start a session or a break
   if(timeLeftInSeconds === 0) {
-    if(isSessionRunning){
+    if(isSessionActive){
       //start a break
       setTimeLeftInSeconds(breakLength * 60);
-      setIsSessionRunning(false);
+      setIsSessionActive(false);
     } else {
       //start a session
       setTimeLeftInSeconds(sessionLength * 60);
-      setIsSessionRunning(true);
+      setIsSessionActive(true);
     }
     //play a beep
     beepRef.current.play();
@@ -71,7 +71,7 @@ export default function App(){
   const resetClock = () => {
     setSessionLength(DEFAULT_SESSION_LENGTH);
     setBreakLength(DEFAULT_BREAK_LENGTH)
-    setIsSessionRunning(true);
+    setIsSessionActive(true);
     setTimeLeftInSeconds(DEFAULT_SESSION_LENGTH * 60);
     setIsClockPaused(true);
     resetBeep();
@@ -103,14 +103,14 @@ export default function App(){
     if(type === 'sessionLength'){
       setSessionLength(newLength);
 
-      if(isSessionRunning && isClockPaused){
+      if(isSessionActive && isClockPaused){
         setTimeLeftInSeconds(newLength * 60);
       }
 
     } else if (type === 'breakLength'){
       setBreakLength(newLength);
 
-      if(!isSessionRunning && isClockPaused){
+      if(!isSessionActive && isClockPaused){
         setTimeLeftInSeconds(newLength * 60);
       }
     }
@@ -170,7 +170,7 @@ export default function App(){
 
       <div id="clock">
         <div id="clock-display" className="flex-center">
-          <h2 id="timer-label">{isSessionRunning ? "Session" : "Break"}</h2>
+          <h2 id="timer-label">{isSessionActive ? "Session" : "Break"}</h2>
           <div id="time-left" data-testid="time-left">{getFormattedTimeLeft()}</div>
         </div>
         <div id="clock-controls">
