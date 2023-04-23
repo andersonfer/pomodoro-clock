@@ -2,13 +2,13 @@ import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
-
 export const MAX_LENGTH_IN_MINUTES = 60;
 export const MIN_LENGTH_IN_MINUTES = 1;
-const FIFTY_NINE_SECONDS = 59;
-const ONE_SECOND_IN_MILISECONDS = 1000;
+
 export const DEFAULT_BREAK_LENGTH = 5;
 export const DEFAULT_SESSION_LENGTH = 25;
+
+const ONE_SECOND_IN_MILISECONDS = 1000;
 
 export default function App(){
   const [breakLength, setBreakLength] = useState(DEFAULT_BREAK_LENGTH);
@@ -35,7 +35,6 @@ export default function App(){
     //play a beep
     beepRef.current.play();
   }
-
 
   //start,stop and resume the clock
   useEffect(() => {
