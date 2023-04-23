@@ -108,14 +108,14 @@ getRandomTime = () => {
   return Math.floor((Math.random() * 59000) + 1000);
 }
 
-it( 'should play a beep and start a break when the session ends', async () => {
+it( 'should start a break and play a beep when the session ends', async () => {
   await userEvent.click(startStopButton);
 
   //Advance the timer by 25mins
   act(() => { jest.advanceTimersByTime(TWENTY_FIVE_MINS_IN_MILISECONDS); } );
 
-  expect(mockPlay).toHaveBeenCalledTimes(1);
   expect(screen.getByRole('heading',{name: "Break"})).toBeInTheDocument();
+  expect(mockPlay).toHaveBeenCalledTimes(1);
 
   const currentTimeLeft = screen.getByTestId('time-left').textContent;
   // Get the minutes part of the display
@@ -127,7 +127,7 @@ it( 'should play a beep and start a break when the session ends', async () => {
 
 });
 
-it('should play a beep and start a session when the break ends', async () =>{
+it('should start a session and play a beep when the break ends', async () =>{
   await userEvent.click(startStopButton);
 
   //Advance the timer by 25mins + 5mins (session + break)
@@ -135,9 +135,9 @@ it('should play a beep and start a session when the break ends', async () =>{
   //TODO analyze why this have to be done in two times
   act(() => { jest.advanceTimersByTime(FIVE_MINS_IN_MILISECONDS); } );
 
+  expect(screen.getByRole('heading',{name: "Session"})).toBeInTheDocument();
   //one beep for the end of the session and other for the end of the break
   expect(mockPlay).toHaveBeenCalledTimes(2);
-  expect(screen.getByRole('heading',{name: "Session"})).toBeInTheDocument();
 
    const currentTimeLeft = screen.getByTestId('time-left').textContent;
   // Get the minutes part of the display
