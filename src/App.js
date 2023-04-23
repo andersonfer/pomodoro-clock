@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 
@@ -9,311 +10,183 @@ const ONE_SECOND_IN_MILISECONDS = 1000;
 export const DEFAULT_BREAK_LENGTH = 5;
 export const DEFAULT_SESSION_LENGTH = 25;
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      breakLength: DEFAULT_BREAK_LENGTH,
-      sessionLength: DEFAULT_SESSION_LENGTH
-    };
-  }
+export default function App(){
+  const [breakLength, setBreakLength] = useState(DEFAULT_BREAK_LENGTH);
+  const [sessionLength, setSessionLength] = useState(DEFAULT_SESSION_LENGTH);
+  const [isSessionRunning, setIsSessionRunning] = useState(true);
+  const [isClockPaused, setIsClockPaused] = useState(true);
+  const [timeLeftInSeconds, setTimeLeftInSeconds] = useState(DEFAULT_SESSION_LENGTH * 60);
 
-  componentDidMount() {
-    document.addEventListener("resetClock", () => {
-      this.resetSetup();
-    });
-  }
+  const beepRef = useRef(null);
+  const intervalRef = useRef(null);
 
-  resetSetup = () => {
-    this.setState({
-      breakLength: DEFAULT_BREAK_LENGTH,
-      sessionLength: DEFAULT_SESSION_LENGTH
-    });
-    this.dispatchNewSessionLength(DEFAULT_SESSION_LENGTH);
-  };
-
-  render() {
-    return (
-      <>
-        <div id="header">
-          <h1 id="title">Pomodoro Clock</h1>
-          <div id="clock-setup">
-            <div id="session-setup" className="flex-center">
-              <h3 id="session-label">
-                Session Length
-              </h3>
-              <div>
-                <button
-                  id="session-decrement"
-                  title="Decrement session length"
-                  onClick={this.decrementSessionLength}
-                >
-                  <i className="fa-solid fa-arrow-down"></i>
-                </button>
-                <span id="session-length" title="Session length in minutes">{this.state.sessionLength}</span>
-                <button
-                  id="session-increment"
-                  title="Increment session length"
-                  onClick={this.incrementSessionLength}
-                >
-                  <i className="fa-solid fa-arrow-up"></i>
-                </button>
-              </div>
-            </div>
-            <div id="break-setup" className="flex-center">
-              <h3 id="break-label">
-                Break Length
-              </h3>
-              <div>
-                <button
-                  id="break-decrement"
-                  title="Decrement break length"
-                  onClick={this.decrementBreakLength}
-                >
-                  <i className="fa-solid fa-arrow-down"></i>
-                </button>
-                <span id="break-length" title="Break length in minutes">{this.state.breakLength}</span>
-                <button
-                  id="break-increment"
-                  title="Increment break length"
-                  onClick={this.incrementBreakLength}
-                >
-                  <i className="fa-solid fa-arrow-up"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="clock">
-          <Clock
-            sessionLength={this.state.sessionLength}
-            breakLength={this.state.breakLength}
-          />
-        </div>
-
-        <footer>Designed and coded by @andersonfer</footer>
-      </>
-    );
-  }
-
-  incrementBreakLength = () => {
-    this.setState((state) => ({
-      breakLength:
-        this.state.breakLength < MAX_LENGTH_IN_MINUTES
-          ? this.state.breakLength + 1
-          : this.state.breakLength
-    }));
-    //this.dispatchBreakUpdatedEvent();
-  };
-
-  decrementBreakLength = () => {
-    this.setState((state) => ({
-      breakLength:
-        this.state.breakLength > MIN_LENGTH_IN_MINUTES
-          ? this.state.breakLength - 1
-          : this.state.breakLength
-    }));
-    //this.dispatchBreakUpdatedEvent();
-  };
-
-  incrementSessionLength = () => {
-    const newSessionLength =
-      this.state.sessionLength < MAX_LENGTH_IN_MINUTES
-        ? this.state.sessionLength + 1
-        : this.state.sessionLength;
-    this.setState((state) => ({
-      sessionLength: newSessionLength
-    }));
-    this.dispatchNewSessionLength(newSessionLength);
-  };
-
-  decrementSessionLength = () => {
-    const newSessionLength =
-      this.state.sessionLength > MIN_LENGTH_IN_MINUTES
-        ? this.state.sessionLength - 1
-        : this.state.sessionLength;
-    this.setState((state) => ({
-      sessionLength: newSessionLength
-    }));
-    this.dispatchNewSessionLength(newSessionLength);
-  };
-
-  dispatchNewSessionLength = (newSessionLength) => {
-    const sessionUpdatedEvent = new CustomEvent("sessionUpdated", {
-      detail: {
-        newSessionLength: newSessionLength
-      }
-    });
-    document.dispatchEvent(sessionUpdatedEvent);
-  };
-}
-
-class Clock extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      minutes: this.props.sessionLength,
-      seconds: 0,
-      isClockPaused: true,
-      hasBreakStarted: false
-    };
-  }
-
-  componentDidMount() {
-    document.addEventListener("sessionUpdated", (e) => {
-      this.updateTimeLeft(e);
-    });
-  }
-
-  updateTimeLeft = (e) => {
-    if (this.isSessionRunning()){
-      //ToDo extract method
-      const newSessionLength = e.detail.newSessionLength;
-      this.setState({
-        minutes: newSessionLength,
-        seconds: 0
-      });
-    }//ToDo break treatment
-  };
-
-  isSessionRunning = () => {
-    return !this.state.hasBreakStarted;
-  }
-
-  componentDidUpdate() {
-    if (this.timerHasReachedZero()) {
-      this.stopClock();
-      this.playBeep();
-      this.startSessionOrBreak();
+  //when the clock reaches 00:00
+  //either start a session or a break
+  if(timeLeftInSeconds === 0) {
+    if(isSessionRunning){
+      //start a break
+      setTimeLeftInSeconds(breakLength * 60);
+      setIsSessionRunning(false);
+    } else {
+      //start a session
+      setTimeLeftInSeconds(sessionLength * 60);
+      setIsSessionRunning(true);
     }
+    //play a beep
+    beepRef.current.play();
   }
 
-  playBeep = () => {
-    document.getElementById("beep").play();
-  }
 
-  timerHasReachedZero = () => {
-    return (
-      this.state.minutes === 0 &&
-      this.state.seconds === 0 &&
-      !this.state.isClockPaused
-    );
-  };
+  //start,stop and resume the clock
+  useEffect(() => {
 
-  startSessionOrBreak = () => {
-    if (this.state.hasBreakStarted) {
-        this.startSession();
-      } else {
-        this.startBreak();
-      }
-  }
+    if(!isClockPaused)
+      intervalRef.current = setInterval(() => {
+        if(timeLeftInSeconds > 0)
+          setTimeLeftInSeconds(t => t - 1);
+      }, ONE_SECOND_IN_MILISECONDS);
+    else
+      clearInterval(intervalRef.current);
 
-  startSession = () => {
-    this.setState({
-      hasBreakStarted: false,
-      minutes: this.props.sessionLength,
-      seconds: 0
-    });
-    this.resumeClock();
-  };
+    return () => clearInterval(intervalRef.current);
 
-  startBreak = () => {
-    this.setState({
-      hasBreakStarted: true,
-      minutes: this.props.breakLength,
-      seconds: 0
-    });
-    this.resumeClock();
-  };
+  },[isClockPaused,timeLeftInSeconds]);
 
-  render() {
-    return (
-      <>
-        <div id="clock-display" className="flex-center">
-          <h2 id="timer-label">{this.state.hasBreakStarted ? "Break" : "Session"}</h2>
-          <div id="time-left" data-testid="time-left">{this.getFormattedTimeLeft()}</div>
-        </div>
-        <div id="clock-controls">
-          <button id="start_stop" title="Start/stop clock" onClick={this.startStopClock}>
-            <i className="fa-solid fa-play"></i>
-            <i className="fa-solid fa-pause"></i>
-          </button>
-          <button id="reset" title="Reset clock" onClick={this.resetClock}>
-            <i className="fa-sharp fa-solid fa-repeat"></i>
-          </button>
-          <audio id="beep" src="https://cdn.pixabay.com/download/audio/2023/01/06/audio_43c9ef7336.mp3?filename=achive-sound-132273.mp3" data-testid="beep"/>
-        </div>
-      </>
-    );
-  }
 
-  getFormattedTimeLeft = () => {
-    const formattedMinutesLeft = this.state.minutes.toLocaleString(undefined, {
-      minimumIntegerDigits: 2
-    });
-    const formattedSecondsLeft = this.state.seconds.toLocaleString(undefined, {
-      minimumIntegerDigits: 2
-    });
+  const getFormattedTimeLeft = () => {
+    const seconds = timeLeftInSeconds % 60;
+    const minutes = Math.floor(timeLeftInSeconds/60);
+
+    const formattedMinutesLeft =
+            minutes.toLocaleString(undefined, {minimumIntegerDigits: 2});
+
+    const formattedSecondsLeft =
+            seconds.toLocaleString(undefined, {minimumIntegerDigits: 2});
+
     const formattedTimeLeft = formattedMinutesLeft + ":" + formattedSecondsLeft;
+
     return formattedTimeLeft;
   };
 
-  startStopClock = () => {
-    if (this.state.isClockPaused) {
-      this.resumeClock();
-    } else {
-      this.stopClock();
+
+  const resetClock = () => {
+    setSessionLength(DEFAULT_SESSION_LENGTH);
+    setBreakLength(DEFAULT_BREAK_LENGTH)
+    setIsSessionRunning(true);
+    setTimeLeftInSeconds(DEFAULT_SESSION_LENGTH * 60);
+    setIsClockPaused(true);
+    resetBeep();
+  };
+
+  const resetBeep = () => {
+    beepRef.current.pause();
+    beepRef.current.currentTime = 0;
+  };
+
+
+  const updateLength = (type, operation) => {
+    let currentLenght = type === 'sessionLength' ?
+                        sessionLength :
+                        breakLength;
+    let newLength;
+
+    if(operation === 'increment'){
+      newLength = currentLenght < MAX_LENGTH_IN_MINUTES ?
+                  currentLenght + 1 :
+                  currentLenght
+
+    } else if (operation === 'decrement'){
+      newLength = currentLenght > MIN_LENGTH_IN_MINUTES ?
+                  currentLenght - 1 :
+                  currentLenght
+    }
+
+    if(type === 'sessionLength'){
+      setSessionLength(newLength);
+
+      if(isSessionRunning && isClockPaused){
+        setTimeLeftInSeconds(newLength * 60);
+      }
+
+    } else if (type === 'breakLength'){
+      setBreakLength(newLength);
+
+      if(!isSessionRunning && isClockPaused){
+        setTimeLeftInSeconds(newLength * 60);
+      }
     }
   };
 
-  clockID;
-  resumeClock = () => {
-    this.setState({ isClockPaused: false });
-    this.clockID = setInterval(this.updateClock, ONE_SECOND_IN_MILISECONDS);
-  };
+  return (
+    <>
+      <div id="header">
+        <h1 id="title">Pomodoro Clock</h1>
+        <div id="clock-setup">
+          <div id="session-setup" className="flex-center">
+            <h3 id="session-label">
+              Session Length
+            </h3>
+            <div>
+              <button
+                id="session-decrement"
+                title="Decrement session length"
+                onClick={() => updateLength('sessionLength','decrement')}
+              >
+                <i className="fa-solid fa-arrow-down"></i>
+              </button>
+              <span id="session-length" title="Session length in minutes">{sessionLength}</span>
+              <button
+                id="session-increment"
+                title="Increment session length"
+                onClick={() => updateLength('sessionLength','increment')}
+              >
+                <i className="fa-solid fa-arrow-up"></i>
+              </button>
+            </div>
+          </div>
+          <div id="break-setup" className="flex-center">
+            <h3 id="break-label">
+              Break Length
+            </h3>
+            <div>
+              <button
+                id="break-decrement"
+                title="Decrement break length"
+                onClick={() => updateLength('breakLength','decrement')}
+              >
+                <i className="fa-solid fa-arrow-down"></i>
+              </button>
+              <span id="break-length" title="Break length in minutes">{breakLength}</span>
+              <button
+                id="break-increment"
+                title="Increment break length"
+                onClick={() => updateLength('breakLength','increment')}
+              >
+                <i className="fa-solid fa-arrow-up"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  updateClock = () => {
-    this.setState((state) => ({
-      minutes:
-        state.minutes > 0 && state.seconds === 0
-          ? state.minutes - 1
-          : state.minutes,
-      seconds:
-          state.seconds === 0
-          ? FIFTY_NINE_SECONDS
-          : state.seconds - 1
-    }));
-  };
+      <div id="clock">
+        <div id="clock-display" className="flex-center">
+          <h2 id="timer-label">{isSessionRunning ? "Session" : "Break"}</h2>
+          <div id="time-left" data-testid="time-left">{getFormattedTimeLeft()}</div>
+        </div>
+        <div id="clock-controls">
+          <button id="start_stop" title="Start/stop clock" onClick={()=> setIsClockPaused(!isClockPaused)}>
+            <i className="fa-solid fa-play"></i>
+            <i className="fa-solid fa-pause"></i>
+          </button>
+          <button id="reset" title="Reset clock" onClick={resetClock}>
+            <i className="fa-sharp fa-solid fa-repeat"></i>
+          </button>
+          <audio id="beep" ref={beepRef} src="https://cdn.pixabay.com/download/audio/2023/01/06/audio_43c9ef7336.mp3?filename=achive-sound-132273.mp3" data-testid="beep"/>
+        </div>
+      </div>
 
-  stopClock = () => {
-    this.setState({
-      isClockPaused: true
-    });
-    clearInterval(this.clockID);
-  };
-
-  resetClock = () => {
-    this.setState({
-      hasBreakStarted: false,
-      minutes:DEFAULT_SESSION_LENGTH,
-      seconds:0
-    });
-    this.stopClock();
-    this.resetBeep();
-    this.dispatchResetClockEvent();
-  };
-
-  resetBeep = () => {
-    document.getElementById('beep').pause();
-    document.getElementById('beep').currentTime = 0;
-  }
-
-  dispatchResetClockEvent = () => {
-    const resetClockEvent = new CustomEvent("resetClock");
-    document.dispatchEvent(resetClockEvent);
-  };
+      <footer>Designed and coded by @andersonfer</footer>
+    </>
+  );
 }
-
-
-export default App;
