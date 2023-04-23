@@ -14,7 +14,7 @@ export default function App(){
   const [breakLength, setBreakLength] = useState(DEFAULT_BREAK_LENGTH);
   const [sessionLength, setSessionLength] = useState(DEFAULT_SESSION_LENGTH);
   const [isSessionActive, setIsSessionActive] = useState(true);
-  const [isClockPaused, setIsClockPaused] = useState(true);
+  const [hasClockStarted, setHasClockStarted] = useState(false);
   const [timeLeftInSeconds, setTimeLeftInSeconds] = useState(DEFAULT_SESSION_LENGTH * 60);
 
   const beepRef = useRef(null);
@@ -39,7 +39,7 @@ export default function App(){
   //start,stop and resume the clock
   useEffect(() => {
 
-    if(!isClockPaused)
+    if(hasClockStarted)
       intervalRef.current = setInterval(() => {
         if(timeLeftInSeconds > 0)
           setTimeLeftInSeconds(t => t - 1);
@@ -49,7 +49,7 @@ export default function App(){
 
     return () => clearInterval(intervalRef.current);
 
-  },[isClockPaused,timeLeftInSeconds]);
+  },[hasClockStarted,timeLeftInSeconds]);
 
 
   const getFormattedTimeLeft = () => {
@@ -73,7 +73,7 @@ export default function App(){
     setBreakLength(DEFAULT_BREAK_LENGTH)
     setIsSessionActive(true);
     setTimeLeftInSeconds(DEFAULT_SESSION_LENGTH * 60);
-    setIsClockPaused(true);
+    setHasClockStarted(false);
     resetBeep();
   };
 
@@ -103,14 +103,14 @@ export default function App(){
     if(type === 'sessionLength'){
       setSessionLength(newLength);
 
-      if(isSessionActive && isClockPaused){
+      if(isSessionActive && !hasClockStarted){
         setTimeLeftInSeconds(newLength * 60);
       }
 
     } else if (type === 'breakLength'){
       setBreakLength(newLength);
 
-      if(!isSessionActive && isClockPaused){
+      if(!isSessionActive && !hasClockStarted){
         setTimeLeftInSeconds(newLength * 60);
       }
     }
@@ -174,7 +174,7 @@ export default function App(){
           <div id="time-left" data-testid="time-left">{getFormattedTimeLeft()}</div>
         </div>
         <div id="clock-controls">
-          <button id="start_stop" title="Start/stop clock" onClick={()=> setIsClockPaused(!isClockPaused)}>
+          <button id="start_stop" title="Start/stop clock" onClick={()=> setHasClockStarted(!hasClockStarted)}>
             <i className="fa-solid fa-play"></i>
             <i className="fa-solid fa-pause"></i>
           </button>
